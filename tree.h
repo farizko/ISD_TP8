@@ -19,5 +19,6 @@ void view_inorder(node root);
 void view_postorder(node root);
 node search(node root, int key);
 void deletion(node *p, node *root, int data);
+void bfs(tree T);
 
 #endif // TREE_H_INCLUDED

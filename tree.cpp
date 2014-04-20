@@ -1,104 +1,143 @@
 #include <iostream>
 #include <stdlib.h>
+#include <queue>
 #include "tree.h"
 
 using namespace std;
 
-node allocation(int x) {
+node allocation(int x)
+{
     node p = (node)malloc(sizeof(node_t));
-    if(p != NULL) {
+    if(p != NULL)
+    {
         p->info = x;
         p->left = p->right = NULL;
     }
     return p;
 }
 
-void create_tree(tree *T) {
+void create_tree(tree *T)
+{
     T->root = NULL;
 }
 
-void insert_recursive(node *root, int x) {
-    if(*root == NULL) {
+void insert_recursive(node *root, int x)
+{
+    if(*root == NULL)
+    {
         *root = allocation(x);
-    } else if(x < (*root)->info) {
+    }
+    else if(x < (*root)->info)
+    {
         insert_recursive(&(*root)->left, x);
-    } else if(x > (*root)->info) {
+    }
+    else if(x > (*root)->info)
+    {
         insert_recursive(&(*root)->right, x);
-    } else {
+    }
+    else
+    {
         cout << "Data sudah ada.\n";
     }
 }
 
-void view_preorder(node root) {
-    if(root != NULL) {
+void view_preorder(node root)
+{
+    if(root != NULL)
+    {
         cout << root->info << " ";
         view_preorder(root->left);
         view_preorder(root->right);
     }
 }
 
-void view_inorder(node root) {
-    if(root != NULL) {
+void view_inorder(node root)
+{
+    if(root != NULL)
+    {
         view_inorder(root->left);
         cout << root->info << " ";
         view_inorder(root->right);
     }
 }
 
-void view_postorder(node root) {
-    if(root != NULL) {
+void view_postorder(node root)
+{
+    if(root != NULL)
+    {
         view_postorder(root->left);
         view_postorder(root->right);
         cout << root->info << " ";
     }
 }
 
-node search(node root, int key) {
-    if(root != NULL) {
-        if(key == root->info) {
+node search(node root, int key)
+{
+    if(root != NULL)
+    {
+        if(key == root->info)
+        {
             return root;
-        } else if(key < root->info) {
+        }
+        else if(key < root->info)
+        {
             return search(root->left, key);
-        } else {
+        }
+        else
+        {
             return search(root->right, key);
         }
-    } else {
+    }
+    else
+    {
         return NULL;
     }
 }
 
-void deletion(node *p, node *parent, int data) {
+void deletion(node *p, node *parent, int data)
+{
     node tmpNode, tmpparent;
     if (*p == NULL)
         return;
-    if ((*p)->info == data) {
+    if ((*p)->info == data)
+    {
         /* deleting the leaf p */
-        if (!(*p)->left && !(*p)->right) {
-            if (parent) {
+        if (!(*p)->left && !(*p)->right)
+        {
+            if (parent)
+            {
                 /* delete leaf p */
                 if ((*parent)->left == *p)
                     (*parent)->left = NULL;
                 else
                     (*parent)->right = NULL;
                 free(*p);
-            } else {
+            }
+            else
+            {
                 /* delete parent p with no children */
                 free(*p);
             }
             /* deleting p with one child */
-        } else if (!(*p)->right && (*p)->left) {
+        }
+        else if (!(*p)->right && (*p)->left)
+        {
             /* deleting p with left child alone */
             tmpNode = *p;
             (*parent)->right = (*p)->left;
             free(tmpNode);
             *p = (*parent)->right;
-        } else if ((*p)->right && !(*p)->left) {
+        }
+        else if ((*p)->right && !(*p)->left)
+        {
             /* deleting p with right child alone */
             tmpNode = *p;
             (*parent)->left = (*p)->right;
             free(tmpNode);
             (*p) = (*parent)->left;
-        } else if (!(*p)->right->left) {
+        }
+        else if (!(*p)->right->left)
+        {
             /*
              * deleting a p whose right child
              * is the smallest p in the right
@@ -112,7 +151,9 @@ void deletion(node *p, node *parent, int data) {
             (*parent)->left = (*p)->right;
             free(tmpNode);
             *p = (*parent)->left;
-        } else {
+        }
+        else
+        {
             /*
              * Deleting a p with two children.
              * First, find the smallest p in
@@ -122,7 +163,8 @@ void deletion(node *p, node *parent, int data) {
              * for the children of replaced p.
              */
             tmpNode = (*p)->right;
-            while (tmpNode->left) {
+            while (tmpNode->left)
+            {
                 tmpparent = tmpNode;
                 tmpNode = tmpNode->left;
             }
@@ -132,11 +174,32 @@ void deletion(node *p, node *parent, int data) {
             free(*p);
             *p = tmpNode;
         }
-    } else if (data < (*p)->info) {
+    }
+    else if (data < (*p)->info)
+    {
         /* traverse towards left subtree */
         deletion(&(*p)->left, p, data);
-    } else if (data > (*p)->info) {
+    }
+    else if (data > (*p)->info)
+    {
         /* traversing towards right subtree */
         deletion(&(*p)->right, p, data);
+    }
+}
+
+/** from http://stackoverflow.com/questions/5659744/binary-tree-print-the-elements-according-to-the-level */
+void bfs(tree T)
+{
+    std::queue<node> q;
+    q.push(T.root);
+    while (!q.empty())
+    {
+        node temp = q.front();
+        q.pop();
+        cout << temp->info << endl;
+        if (temp->left)
+            q.push(temp->left);
+        if (temp->right)
+            q.push(temp->right);
     }
 }
