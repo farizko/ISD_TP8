@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1397973933 source:c:\users\feber\documents\codeblocks project\isd_tp8\main.cpp
+	<iostream>
+	"tree.h"
+
+1397973925 c:\users\feber\documents\codeblocks project\isd_tp8\tree.h
+
+1397974409 source:c:\users\feber\documents\codeblocks project\isd_tp8\tree.cpp
+	<iostream>
+	<stdlib.h>
+	"tree.h"
+
